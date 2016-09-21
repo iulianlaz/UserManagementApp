@@ -4,6 +4,7 @@ require_once('Util/Autoloader.php');
 use Core\Interceptor;
 use UserResource\Handler;
 
+/* Builds the Request object */
 $interceptor = new Interceptor();
 try {
     $request = $interceptor->interceptRequest();
@@ -11,6 +12,7 @@ try {
     echo json_encode(array("error" => $e->getMessage()));
 }
 
+/* Handles the request */
 $handler = new Handler();
 try {
     $response = $handler->handle($request);

@@ -20,7 +20,7 @@ class Handler extends aHandler {
         $this->_validateResource($resName);
         $opName = $request->getOperationName();
 
-        $this->_handleOperation($opName);
+        $this->_handleOperation($opName, $request->getPayload());
 
         return true;
 
@@ -42,7 +42,20 @@ class Handler extends aHandler {
     /**
      * @param $opName
      */
-    private function _handleOperation($opName) {
+    private function _handleOperation($opName, $data) {
+        switch ($opName) {
+            case 'add':
+                $this->_dao->insert($data);
+                break;
 
+            case 'edit':
+                break;
+
+            case 'delete':
+                break;
+
+            default:
+                throw new \Exception('Invalid operation name');
+        }
     }
 }

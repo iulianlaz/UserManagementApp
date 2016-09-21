@@ -11,7 +11,7 @@ abstract class aHandler {
     /**
      * Data access object
      */
-    private $_dao = null;
+    protected $_dao = null;
 
     public function __construct() {
         $this->_dao = new MongoDAO();

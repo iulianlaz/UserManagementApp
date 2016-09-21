@@ -43,8 +43,10 @@ class Handler extends aHandler {
      * @param $opName
      */
     private function _handleOperation($opName, $data) {
+        $validator = new UserValidator($data);
         switch ($opName) {
             case 'add':
+                $validator->validateUser();
                 $this->_dao->insert($data);
                 break;
 

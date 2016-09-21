@@ -1,5 +1,6 @@
 <?php
 namespace UserResource;
+use Util\Logging;
 
 /**
  * Class UserValidator
@@ -88,8 +89,14 @@ class UserValidator {
             throw new \Exception(' Invalid password');
         }
 
-        if (!preg_match('/^[A-Za-z0-9_~\-!@#\$%\^&*\(\)]+$/', $this->_userData['password'])) {
+        /* Password must contain alphanumeric and special chars */
+        if (!preg_match('/^[A-Za-z0-9]*[^A-Za-z0-9]+[A-Za-z0-9]*$/', $this->_userData['password'])) {
             throw new \Exception(' Invalid password');
         }
+
+        if (strlen($this->_userData['password']) < 8) {
+            throw new \Exception(' Invalid password');
+        }
+
     }
 }

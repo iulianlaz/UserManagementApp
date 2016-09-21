@@ -14,6 +14,9 @@ class MongoDAO {
      */
     private $_collection = null;
 
+    /**
+     * @var \MongoDB\Database|null
+     */
     private $_database = null;
 
     public function __construct() {
@@ -25,16 +28,33 @@ class MongoDAO {
         $this->_collection = $this->_database->$coll;
     }
 
+    /**
+     * @param $data
+     */
     public function insert($data) {
         $this->_collection->insertOne($data);
     }
 
+    /**
+     * @param $data
+     */
     public function update($data) {
         $this->_collection->updateOne($data);
     }
 
+    /**
+     * @param null $query
+     * @return \MongoDB\Driver\Cursor
+     */
+    public function find($query = null) {
+        return $this->_collection->find($query);
+    }
+
+    /**
+     * @param $ids
+     */
     public function delete($ids) {
-        $this->_collection->deleteMany();
+        $this->_collection->deleteMany(array("_id" => array('$in' => $ids)));
     }
 
 

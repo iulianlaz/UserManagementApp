@@ -3,6 +3,8 @@ namespace UserResource;
 
 use Core\aHandler;
 use Core\Request;
+use Util\Logging;
+use Util\Util;
 
 /**
  * Class Handler
@@ -46,14 +48,18 @@ class Handler extends aHandler {
         $validator = new UserValidator($data);
         switch ($opName) {
             case 'add':
+                // FIXME: username must be UNIQUE
                 $validator->validateUser();
+                $data['password'] = Util::encryptPassword($data['password']);
                 $this->_dao->insert($data);
                 break;
 
             case 'edit':
+                // To do : validate editable attr + encrypt pass
                 break;
 
             case 'delete':
+                $this->_dao->delete($data);
                 break;
 
             default:

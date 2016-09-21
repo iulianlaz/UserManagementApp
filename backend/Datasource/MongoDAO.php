@@ -1,3 +1,8 @@
 <?php
+namespace Datasource;
 
-require ("./vendor/autoload.php");
+require("Datasource/vendor/autoload.php");
+
+class MongoDAO {
+
+}

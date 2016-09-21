@@ -2,17 +2,21 @@
 require_once('Util/Autoloader.php');
 
 use Core\Interceptor;
+use UserResource\Handler;
 
 $interceptor = new Interceptor();
-error_log('____________________________');
 try {
     $request = $interceptor->interceptRequest();
-    error_log('____________________________');
 } catch (Exception $e) {
-    echo $e->getMessage();
+    echo json_encode(array("error" => $e->getMessage()));
 }
-error_log('____________________________');
-//$handler = new Handler();
-//$handler->handle($request);
+
+$handler = new Handler();
+try {
+    $response = $handler->handle($request);
+    echo json_encode(array('result' => $response));
+} catch (Exception $e) {
+    echo json_encode(array("error" => $e->getMessage()));
+}
 
 

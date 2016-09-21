@@ -1,6 +1,10 @@
 <?php
 namespace Core;
 
+/**
+ * Class Interceptor
+ * @package Core
+ */
 class Interceptor {
     private $_request = null;
 

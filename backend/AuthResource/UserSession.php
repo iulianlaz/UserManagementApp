@@ -98,6 +98,18 @@ class UserSession {
         return false;
     }
 
+    public function updateUsername($username) {
+        if ($this->isLoggedIn()) {
+            $_SESSION['userInfo']['username'] = $username;
+        }
+    }
+
+    public function updateRole($role) {
+        if ($this->isLoggedIn()) {
+            $_SESSION['userInfo']['role'] = $role;
+        }
+    }
+
     /**
      * Logout user
      * @return bool

@@ -1,4 +1,14 @@
 <?php
+/**
+ * Possible response attributes:
+ * {
+ *  "result": "",
+ *  "auth": "",
+ *  "error" : "",
+ *  "message": ""
+ * }
+ */
+
 session_start();
 
 require_once('Util/Autoloader.php');

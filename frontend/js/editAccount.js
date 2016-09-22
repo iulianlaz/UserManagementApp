@@ -6,46 +6,57 @@ $(document).ready(function(){
         $('#mainBody').append(editAccountTemplate);
     });
 
-    /* Add delegate because #toSend element is dynamically generated */
+    /* Update account */
     $('#generalContainer').on('click', '#saveEditAccount',  function(){
 
-        $('#userErrLog').empty();
-        var user = $('#inputEditAccountUserName').val();
+        $('#userEditAccountErrLog').empty();
+        var user = $('#inputEditAccountUsername').val();
         var pass = $('#inputEditAccountPassword').val();
-        var data = {'username': user, 'password':pass};
+
+        /* Get current user */
+        var welcomeCurrentUser = $('#uniqueUser').text();
+        welcomeCurrentUser = welcomeCurrentUser.substring(0, welcomeCurrentUser.length - 1);
+        var currUser = welcomeCurrentUser.replace('Welcome, ', '');
+
+        var data = {};
+        if (currUser) {
+            data.currentUsername = currUser;
+        }
+
+        if (user) {
+            data.username = user;
+        }
+
+        if (pass) {
+            data.password = pass;
+        }
 
         $.ajax({
-            url: "backend/rest.php/user/update",
+            url: "backend/rest.php/user/edit",
             contentType: "application/json",
             data: JSON.stringify(data),
             type: "POST",
             dataType: "json",
             success: function (data) {
-                // if (data.hasOwnProperty('auth')) {
-                //     $('#generalContainer').empty();
-                //
-                //     /* If user is authenticated, then show page */
-                //     if (data.auth) {
-                //         generateManagementPage(data.result);
-                //
-                //         /* If error occurs, then show error */
-                //     } else {
-                //         $('#inputUser').val("");
-                //         $('#inputPassword').val("");
-                //         if (data.hasOwnProperty('error')) {
-                //             $('#userErrLog').empty();
-                //             $('#userErrLog').append(data.error);
-                //         }
-                //     }
-                // } else {
-                //     $('#inputUser').val("");
-                //     $('#inputPassword').val("");
-                //
-                //     if (data.hasOwnProperty('error')) {
-                //         $('#userErrLog').empty();
-                //         $('#userErrLog').append(data.error);
-                //     }
-                // }
+                $('#inputEditAccountUsername').val("");
+                $('#inputEditAccountPassword').val("");
+                 if (data.hasOwnProperty('message')) {
+                     $('#userEditAccountErrLog').empty();
+                     $('#userEditAccountErrLog').removeClass('label-danger').addClass('label-success');
+                     $('#userEditAccountErrLog').append(data.message);
+
+                     console.log(data.result);
+
+                     /* Update username from welcome (right top corner) */
+                     $('#uniqueUser').empty();
+                     $('#uniqueUser').text('Welcome, ' + data.result.username + '!');
+                 }
+
+                if (data.hasOwnProperty('error')) {
+                    $('#userEditAccountErrLog').empty();
+                    $('#userEditAccountErrLog').removeClass('label-success').addClass('label-danger');
+                    $('#userEditAccountErrLog').append(data.error);
+                }
             }
         });
 

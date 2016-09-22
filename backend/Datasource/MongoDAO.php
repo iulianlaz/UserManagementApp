@@ -38,8 +38,13 @@ class MongoDAO {
     /**
      * @param $data
      */
-    public function update($data) {
-        $this->_collection->updateOne($data);
+    public function update($query, $data) {
+        $result = $this->_collection->updateOne($query, $data);
+        if ($result->isAcknowledged()) {
+            return true;
+        }
+
+        return false;
     }
 
     /**

@@ -56,19 +56,26 @@ class MongoDAO {
 
     /**
      * @param null $query
-     * @return \MongoDB\Driver\Cursor
+     * @return array
      */
-    public function find($query = null) {
+    public function find($query = array()) {
         return $this->_collection->find(
             $query
         );
     }
 
     /**
+     * Delete docs based on ids (in out case username, because they are unique
      * @param $ids
      */
     public function delete($ids) {
-        $this->_collection->deleteMany(array("_id" => array('$in' => $ids)));
+        $result = $this->_collection->deleteMany(array("username" => array('$in' => $ids)));
+
+        if ($result->isAcknowledged()) {
+            return true;
+        }
+
+        return false;
     }
 
 

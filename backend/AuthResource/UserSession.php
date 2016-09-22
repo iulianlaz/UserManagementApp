@@ -37,7 +37,16 @@ class UserSession {
             $cursor = $this->_dao->find(array(
                 "username" => $username
             ));
-            $result = $cursor->toArray();
+            Logging::log('----------------', $cursor);
+            if (!empty($cursor)) {
+                if (!is_array($cursor)) {
+                    $result = $cursor->toArray();
+                } else {
+                    $result = $cursor;
+                }
+            } else {
+                throw new \Exception('User does not exist');
+            }
 
             /* Set session for current user */
             if (!empty($result)) {
@@ -75,6 +84,7 @@ class UserSession {
      * @return bool
      */
     public function isLoggedIn() {
+        // FIXME: Should be checked agains database also. The user could be removed
         if (isset($_SESSION['userIdSession']) && isset($_SESSION['userInfo'])) {
             return true;
         }

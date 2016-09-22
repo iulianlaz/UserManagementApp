@@ -11,3 +11,7 @@ body {
 .form-signin {
     width: 30%;
 }
+
+.grid-custom-user {
+    background-color: #ffffdd;
+}

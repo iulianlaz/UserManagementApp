@@ -6,46 +6,108 @@ var userManagementButtons = '<div class="row"> \
             <div class="col-md-2"> \
             <button id="refreshGrid" class="btn btn-primary" type="submit">Refresh Grid</button>\
             </div> \
+            <div class="col-md-2"> \
+            <button id="deleteUsers" class="btn btn-primary" type="submit">Delete Selected Users</button>\
+            </div> \
             </div>';
+
+/**
+ * Method used to build the list of users
+ * It is called when a operation has been done on the list:
+ *  - On click on "User management button"
+ *  - delete user
+ */
+var buildUserList = function(){
+
+    /* Main body must be cleared */
+    $('#mainBody').empty();
+
+    $('#mainBody').append(userManagementButtons);
+    $('#mainBody').append("<p></p>");
+
+    $.ajax({
+        url: "backend/rest.php/user/find",
+        contentType: "application/json",
+        //data: JSON.stringify(data),
+        type: "POST",
+        dataType: "json",
+        success: function (data) {
+            var header = '<div class="row show-grid grid-custom-user"> \
+                    <div  class="col-md-2 grid-custom"><h4>Role</h4></div> \
+                    <div class="col-md-2 grid-custom"><h4> Username</h4></div> \
+                    <div  class="col-md-2 grid-custom"><h4> Email</h4></div> \
+                    <div  class="col-md-2 grid-custom"><h4> Edit User</h4></div> \
+                    <div  class="col-md-2 grid-custom"><h4> Select</h4></div> \
+                </div>';
+
+            $('#mainBody').append(header);
+
+            /* Get current user (this will be updated - because it is unique - it is like an id)*/
+            var welcomeCurrentUser = $('#uniqueUser').text();
+            welcomeCurrentUser = welcomeCurrentUser.substring(0, welcomeCurrentUser.length - 1);
+            var currUser = welcomeCurrentUser.replace('Welcome, ', '');
+
+            if (data.hasOwnProperty('result')) {
+                console.log('----here-----');
+                console.log(data.result1);
+
+                for (var userItem in data.result) {
+                    if (data.result.hasOwnProperty(userItem)) {
+                        var userList = '<div class="row show-grid grid-custom-user">';
+
+                        if (data.result[userItem].hasOwnProperty('role')) {
+                            userList += '<div class="col-md-2 grid-custom"><h4>' +
+                                data.result[userItem].role +
+                                '</h4></div>';
+                        } else {
+                            userList += '<div class="col-md-2 grid-custom"><</div>';
+                        }
+
+                        if (data.result[userItem].hasOwnProperty('username')) {
+                            var iAmHere = '';
+
+                            if (currUser === data.result[userItem].username) {
+                                iAmHere = '(Current user)';
+                            }
+
+                            userList += '<div class="col-md-2 grid-custom"><h4>' +
+                                data.result[userItem].username + ' ' + iAmHere +
+                                '</h4></div>';
+                        } else {
+                            userList += '<div class="col-md-2 grid-custom"></div>';
+                        }
+
+                        if (data.result[userItem].hasOwnProperty('email')) {
+                            userList += '<div class="col-md-2 grid-custom"><h4>' +
+                                data.result[userItem].email +
+                                '</h4></div>';
+                        } else {
+                            userList += '<div class="col-md-2 grid-custom"><</div>';
+                        }
+
+                        userList += '<div class="col-md-2 grid-custom">' +
+                            '<button id="edit_'+ data.result[userItem].username + '" class="btn-small btn btn-primary" type="submit">Edit User</button>' +
+                            '</div>';
+
+                        userList += '<div class="col-md-2 grid-custom">' +
+                            '<input type="checkbox" name="user-del-checkbox" value="' + data.result[userItem].username +'">' +
+                            '</div>';
+
+
+                        $('#mainBody').append(userList);
+                    }
+
+                }
+
+
+            }
+        }
+    });
+}
 
 $(document).ready(function(){
     /* ============ Generate user management grid ============= */
-    $('#generalContainer').on('click', '#uniqueUserManagement',  function(){
-
-        /* Main body must be cleared */
-        $('#mainBody').empty();
-
-        $('#mainBody').append(userManagementButtons);
-
-
-        // $.ajax({
-        //     url: "backend/rest.php/user/find",
-        //     contentType: "application/json",
-        //     data: JSON.stringify(data),
-        //     type: "POST",
-        //     dataType: "json",
-        //     success: function (data) {
-        //         $('#inputEditAccountUsername').val("");
-        //         $('#inputEditAccountPassword').val("");
-        //         if (data.hasOwnProperty('message')) {
-        //             $('#userEditAccountErrLog').empty();
-        //             $('#userEditAccountErrLog').removeClass('label-danger').addClass('label-success');
-        //             $('#userEditAccountErrLog').append(data.message);
-        //
-        //             /* Update username from welcome (right top corner) */
-        //             $('#uniqueUser').empty();
-        //             $('#uniqueUser').text('Welcome, ' + data.result.username + '!');
-        //         }
-        //
-        //         if (data.hasOwnProperty('error')) {
-        //             $('#userEditAccountErrLog').empty();
-        //             $('#userEditAccountErrLog').removeClass('label-success').addClass('label-danger');
-        //             $('#userEditAccountErrLog').append(data.error);
-        //         }
-        //     }
-        // });
-
-    });
+    $('#generalContainer').on('click', '#uniqueUserManagement',  buildUserList);
 
     /* ============ Add user template =========== */
     $('#generalContainer').on('click', '#newUser',  function(){
@@ -105,8 +167,9 @@ $(document).ready(function(){
                 }
             }
         });
-
-
     });
+
+    /* ================= Refresh Grid  ================ */
+    $('#generalContainer').on('click', '#refreshGrid',  buildUserList);
 
 });

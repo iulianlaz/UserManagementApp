@@ -18,6 +18,7 @@ class Handler extends aHandler {
     protected $_supportedOps = array(
         '_add',
         '_edit',
+        '_find',
         '_delete'
     );
 
@@ -115,14 +116,59 @@ class Handler extends aHandler {
         return array("error" => "Update failed");
     }
 
+    protected function _find($query = array()) {
+        if (empty($query)) {
+            $query = array();
+        }
+
+        if ($this->_checkPermissions()) {
+            $result = $this->_dao->find($query);
+            if (!empty($result)) {
+                $resultArray = $result->toArray();
+
+                /* Do not return all fields, only the one that we need */
+                $responseArray = array();
+                foreach($resultArray as $key => $value) {
+                    $mandatoryFields = array();
+                    if (isset($value['username'])) {
+                        $mandatoryFields['username'] = $value['username'];
+                    }
+
+                    if (isset($value['email'])) {
+                        $mandatoryFields['email'] = $value['email'];
+                    }
+
+                    if (isset($value['role'])) {
+                        $mandatoryFields['role'] = $value['role'];
+                    }
+
+                    if (!empty($mandatoryFields)) {
+                        $responseArray[] = $mandatoryFields;
+                    }
+                }
+
+
+                return array("result" => $responseArray);
+            }
+        }
+
+        return array("error" => "Find method failed");
+    }
+
     /**
+     * Delete users based on their usernames
      * @param $ids
      */
     protected function _delete($ids) {
         /* Only admin users can add new users */
         if ($this->_checkPermissions()) {
-
+            $result = $this->_dao->delete($ids);
+            if (!empty($result)) {
+                return array("message" => "Users have been deleted.");
+            }
         }
+
+        return array("error" => "Delete method failed");
     }
 
     /**

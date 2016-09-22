@@ -12,6 +12,45 @@ var userManagementButtons = '<div class="row"> \
             </div>';
 
 /**
+ * Header for user management grid
+ * @type {string}
+ */
+var header = '<div class="row show-grid grid-custom-user"> \
+                    <div  class="col-md-2 grid-custom"><h4>Role\
+                    <div class="dropdown">\
+                        <button class="btn btn-small btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Sort\
+                        <span class="caret"></span></button>\
+                        <ul class="dropdown-menu">\
+                            <li><a href="#">Asc</a></li>\
+                            <li><a href="#">Desc</a></li>\
+                        </ul>\
+                    </div>\
+                    </h4></div> \
+                    <div class="col-md-2 grid-custom"><h4> Username \
+                    <div class="dropdown">\
+                        <button class="btn btn-small btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Sort\
+                        <span class="caret"></span></button>\
+                        <ul class="dropdown-menu">\
+                            <li><a href="#">Asc</a></li>\
+                            <li><a href="#">Desc</a></li>\
+                        </ul>\
+                    </div>\
+                    </h4></div>\
+                    <div  class="col-md-2 grid-custom"><h4> Email \
+                    <div class="dropdown">\
+                        <button class="btn btn-small btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Sort\
+                        <span class="caret"></span></button>\
+                        <ul class="dropdown-menu">\
+                            <li><a href="#">Asc</a></li>\
+                            <li><a href="#">Desc</a></li>\
+                        </ul>\
+                    </div>\
+                    </h4></div>\
+                    <div  class="col-md-2 grid-custom"><h4> Edit User</h4></div> \
+                    <div  class="col-md-2 grid-custom"><h4> Select</h4></div> \
+                </div>';
+
+/**
  * Method used to build the list of users
  * It is called when a operation has been done on the list:
  *  - On click on "User management button"
@@ -32,13 +71,6 @@ var buildUserList = function(){
         type: "POST",
         dataType: "json",
         success: function (data) {
-            var header = '<div class="row show-grid grid-custom-user"> \
-                    <div  class="col-md-2 grid-custom"><h4>Role</h4></div> \
-                    <div class="col-md-2 grid-custom"><h4> Username</h4></div> \
-                    <div  class="col-md-2 grid-custom"><h4> Email</h4></div> \
-                    <div  class="col-md-2 grid-custom"><h4> Edit User</h4></div> \
-                    <div  class="col-md-2 grid-custom"><h4> Select</h4></div> \
-                </div>';
 
             $('#mainBody').append(header);
 
@@ -56,9 +88,9 @@ var buildUserList = function(){
                         var userList = '<div class="row show-grid grid-custom-user">';
 
                         if (data.result[userItem].hasOwnProperty('role')) {
-                            userList += '<div class="col-md-2 grid-custom"><h4>' +
+                            userList += '<div class="col-md-2 grid-custom">' +
                                 data.result[userItem].role +
-                                '</h4></div>';
+                                '<p></p></div>';
                         } else {
                             userList += '<div class="col-md-2 grid-custom"><</div>';
                         }
@@ -66,32 +98,33 @@ var buildUserList = function(){
                         if (data.result[userItem].hasOwnProperty('username')) {
                             var iAmHere = '';
 
+                            /* Mark current auth user */
                             if (currUser === data.result[userItem].username) {
-                                iAmHere = '(Current user)';
+                                iAmHere = '(you)';
                             }
 
-                            userList += '<div class="col-md-2 grid-custom"><h4>' +
+                            userList += '<div class="col-md-2 grid-custom">' +
                                 data.result[userItem].username + ' ' + iAmHere +
-                                '</h4></div>';
+                                '<p></p></div>';
                         } else {
-                            userList += '<div class="col-md-2 grid-custom"></div>';
+                            userList += '<div class="col-md-2 grid-custom">p></p></div>';
                         }
 
                         if (data.result[userItem].hasOwnProperty('email')) {
-                            userList += '<div class="col-md-2 grid-custom"><h4>' +
+                            userList += '<div class="col-md-2 grid-custom">' +
                                 data.result[userItem].email +
-                                '</h4></div>';
+                                '<p></p></div>';
                         } else {
-                            userList += '<div class="col-md-2 grid-custom"><</div>';
+                            userList += '<div class="col-md-2 grid-custom">p></p></div>';
                         }
 
                         userList += '<div class="col-md-2 grid-custom">' +
                             '<button id="edit_'+ data.result[userItem].username + '" class="btn-small btn btn-primary" type="submit">Edit User</button>' +
-                            '</div>';
+                            '<p></p></div>';
 
                         userList += '<div class="col-md-2 grid-custom">' +
                             '<input type="checkbox" name="user-del-checkbox" value="' + data.result[userItem].username +'">' +
-                            '</div>';
+                            '<p></p></div>';
 
 
                         $('#mainBody').append(userList);

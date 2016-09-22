@@ -22,7 +22,6 @@ $(document).ready(function() {
                         $('#inputEditAccountPassword').val("");
                         if (data.hasOwnProperty('message')) {
                             buildUserList();
-                            alert(data.message);
                         }
 
                         if (data.hasOwnProperty('error')) {

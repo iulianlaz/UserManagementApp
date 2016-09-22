@@ -49,10 +49,12 @@ class UserSession {
                         $id = $result[0]['_id']->__toString();
                     }
 
-                    Logging::log('-----> Pass data: ', $result);
                     if (Util::checkPassword($password, $result[0]['password'])) {
-                        Logging::log('-----> OK !!!!');
                         $_SESSION['userIdSession'] = $id;
+                        $_SESSION['userInfo'] = array(
+                          "username" => $result[0]['username'],
+                          "role" => $result[0]['role']
+                        );
                         return true;
                     }
                 }
@@ -71,8 +73,16 @@ class UserSession {
      * @return bool
      */
     public function isLoggedIn() {
-        if (isset($_SESSION['userIdSession'])) {
+        if (isset($_SESSION['userIdSession']) && isset($_SESSION['userInfo'])) {
             return true;
+        }
+
+        return false;
+    }
+
+    public function checkSession() {
+        if ($this->isLoggedIn()) {
+            return $_SESSION['userInfo'];
         }
 
         return false;
@@ -85,6 +95,7 @@ class UserSession {
     public function logout() {
         session_destroy();
         unset($_SESSION['userIdSession']);
+        unset($_SESSION['userInfo']);
         return true;
     }
 }

@@ -28,7 +28,7 @@ if (!$userSession->isLoggedIn()) {
 
     /* Only login method could be accessed if we are not authenticated */
     $allowedResource = 'auth';
-    $opAllowedNoAuth = array('login');
+    $opAllowedNoAuth = array('login', 'check');
 
     /* Should continue only for login operation for auth resource. Otherwise, exit */
     if (($resourceName !== $allowedResource) && !in_array($request->getOperationName(), $opAllowedNoAuth)) {

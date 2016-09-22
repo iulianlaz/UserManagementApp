@@ -1,6 +1,6 @@
 $(document).ready(function(){
-
-    $('#toSend').click(function(){
+    /* Add delegate because #toSend element is dynamically generated */
+    $('#generalContainer').on('click', '#toSend',  function(){
 
         var user = $('#inputUser').val();
         var pass = $('#inputPassword').val();

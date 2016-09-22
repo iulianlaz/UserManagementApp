@@ -15,6 +15,7 @@ class Handler extends aHandler {
      */
     protected $_supportedOps = array(
         '_login',
+        '_check',
         '_logout'
     );
 
@@ -35,6 +36,22 @@ class Handler extends aHandler {
         } else {
             return array(
                 "error" => "Authentication failed.",
+                "auth" => false
+            );
+        }
+    }
+
+    protected function _check() {
+        $userSession = UserSession::getInstance();
+        $userInfo = $userSession->checkSession();
+        if (!empty($userInfo)) {
+            return array(
+                "result" => $userInfo,
+                "auth" => true
+            );
+        } else {
+            return array(
+                "error" => "Not authenticated.",
                 "auth" => false
             );
         }

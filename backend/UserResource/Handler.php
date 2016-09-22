@@ -125,6 +125,11 @@ class Handler extends aHandler {
         return array("error" => "Update failed");
     }
 
+    /**
+     * Finds users based on query provided
+     * @param array $query
+     * @return array
+     */
     protected function _find($query = array()) {
         if (empty($query)) {
             $query = array();

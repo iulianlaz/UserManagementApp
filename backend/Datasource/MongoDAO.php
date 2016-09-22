@@ -3,7 +3,7 @@ namespace Datasource;
 
 use Util\Logging;
 
-require("Datasource/vendor/autoload.php");
+require_once("vendor/autoload.php");
 
 class MongoDAO {
     /**
@@ -65,11 +65,11 @@ class MongoDAO {
     }
 
     /**
-     * Delete docs based on ids (in out case username, because they are unique
+     * Delete docs based on ids (in our case username, because they are unique
      * @param $ids
      */
-    public function delete($ids) {
-        $result = $this->_collection->deleteMany(array("username" => array('$in' => $ids)));
+    public function delete($ids, $field = 'username') {
+        $result = $this->_collection->deleteMany(array($field => array('$in' => $ids)));
 
         if ($result->isAcknowledged()) {
             return true;

@@ -34,8 +34,14 @@ class Handler extends aHandler {
         /* Only admin users can add new users */
         if ($this->_checkPermissions()) {
             $data['password'] = Util::encryptPassword($data['password']);
-            return $this->_dao->insert($data);
+            $result = $this->_dao->insert($data);
+
+            if ($result) {
+                return array("message" => "User successfully updated");
+            }
         }
+
+        return array("error" => "User cannot be created");
     }
 
     /**
@@ -48,8 +54,6 @@ class Handler extends aHandler {
             throw new \Exception('Current username is not set.');
         }
 
-        Logging::log('-------> Update result: ', $data);
-
         $validator = new UserValidator($data);
 
         /* Username must be unique */
@@ -58,18 +62,18 @@ class Handler extends aHandler {
             $this->_checkUsername($data['username']);
         }
 
-        /* Username must be unique */
+        /* Validate password. Also, encrypts it */
         if (isset($data['password'])) {
             $validator->validatePassword();
             $data['password'] = Util::encryptPassword($data['password']);
         }
 
-        /* Username must be unique */
+        /* Validate role */
         if (isset($data['role'])) {
             $validator->validateRole();
         }
 
-        /* Username must be unique */
+        /* Validate email */
         if (isset($data['email'])) {
             $validator->validateEmail();
         }
@@ -82,8 +86,6 @@ class Handler extends aHandler {
             if (empty($data)) {
                 return array("message" => "Nothing to update");
             }
-
-            Logging::log('-------> Last result: ', $data);
 
             $result = $this->_dao->update(
                 array("username" => $currUsername),

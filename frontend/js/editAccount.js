@@ -13,7 +13,7 @@ $(document).ready(function(){
         var user = $('#inputEditAccountUsername').val();
         var pass = $('#inputEditAccountPassword').val();
 
-        /* Get current user */
+        /* Get current user (this will be updated - because it is unique - it is like an id)*/
         var welcomeCurrentUser = $('#uniqueUser').text();
         welcomeCurrentUser = welcomeCurrentUser.substring(0, welcomeCurrentUser.length - 1);
         var currUser = welcomeCurrentUser.replace('Welcome, ', '');
@@ -44,8 +44,6 @@ $(document).ready(function(){
                      $('#userEditAccountErrLog').empty();
                      $('#userEditAccountErrLog').removeClass('label-danger').addClass('label-success');
                      $('#userEditAccountErrLog').append(data.message);
-
-                     console.log(data.result);
 
                      /* Update username from welcome (right top corner) */
                      $('#uniqueUser').empty();

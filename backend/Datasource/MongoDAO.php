@@ -1,6 +1,8 @@
 <?php
 namespace Datasource;
 
+use Util\Logging;
+
 require("Datasource/vendor/autoload.php");
 
 class MongoDAO {
@@ -32,7 +34,12 @@ class MongoDAO {
      * @param $data
      */
     public function insert($data) {
-        $this->_collection->insertOne($data);
+        $result = $this->_collection->insertOne($data);
+        if ($result->isAcknowledged()) {
+            return true;
+        }
+
+        return false;
     }
 
     /**

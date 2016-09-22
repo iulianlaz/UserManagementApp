@@ -28,7 +28,7 @@ class UserSession {
      * Login the user
      * @param $username
      * @param $password
-     * @return bool
+     * @return mixed
      * @throws \Exception
      */
     public function login($username, $password) {
@@ -55,12 +55,14 @@ class UserSession {
                           "username" => $result[0]['username'],
                           "role" => $result[0]['role']
                         );
-                        return true;
+                        return $_SESSION['userInfo'];
+                    } else {
+                        throw new \Exception('Invalid login password');
                     }
                 }
             }
 
-            throw new \Exception('Login failed');
+            throw new \Exception('Invalid login username');
 
         }
         catch(\Exception $e) {

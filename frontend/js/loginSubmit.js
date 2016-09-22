@@ -2,9 +2,10 @@ $(document).ready(function(){
     /* Add delegate because #toSend element is dynamically generated */
     $('#generalContainer').on('click', '#toSend',  function(){
 
+        $('#userErrLog').empty();
         var user = $('#inputUser').val();
         var pass = $('#inputPassword').val();
-        var data = {'role': user, 'password':pass, "username": "iuliantest", "email": "test@dd.com"};
+        var data = {'username': user, 'password':pass};
 
         $.ajax({
             url: "backend/rest.php/auth/login",
@@ -13,17 +14,34 @@ $(document).ready(function(){
             type: "POST",
             dataType: "json",
             success: function (data) {
-                console.log(data);
-                //setTimeout(function() {document.location.href = "./php/frontpage.php" });
+                if (data.hasOwnProperty('auth')) {
+                    $('#generalContainer').empty();
 
-                // if (data.retResponse == 'success') {
-                //     document.location.href = data.showProperties;
-                // }
-                // // Error
-                // else {
-                //     $(data.retResponse).empty();
-                //     $(data.retResponse).append(data.showProperties);
-                // }
+                    /* If user is authenticated, then show page */
+                    if (data.auth) {
+                        $('#generalContainer').append(managementTemplate);
+                        console.log(data.result.username);
+                        $('#uniqueUser').empty();
+                        $('#uniqueUser').text('Welcome, ' +  data.result.username + '!');
+
+                    /* If error occurs, then show error */
+                    } else {
+                        $('#inputUser').val("");
+                        $('#inputPassword').val("");
+                        if (data.hasOwnProperty('error')) {
+                            $('#userErrLog').empty();
+                            $('#userErrLog').append(data.error);
+                        }
+                    }
+                } else {
+                    $('#inputUser').val("");
+                    $('#inputPassword').val("");
+
+                    if (data.hasOwnProperty('error')) {
+                        $('#userErrLog').empty();
+                        $('#userErrLog').append(data.error);
+                    }
+                }
             }
         });
 

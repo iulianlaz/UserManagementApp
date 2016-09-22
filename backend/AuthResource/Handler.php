@@ -24,13 +24,16 @@ class Handler extends aHandler {
      */
     protected function _login($data) {
         $userValidator = new UserValidator($data);
-        $userValidator->validateUser();
+        $userValidator->validateUsername();
         $userValidator->validatePassword();
 
         $userSession =  UserSession::getInstance();
-        if ($userSession->login($data['username'], $data['password'])) {
+
+        $loginResult = $userSession->login($data['username'], $data['password']);
+        if (!empty($loginResult)) {
             return array(
                 "message" => "Successfully authenticated user.",
+                "result" => $loginResult,
                 "auth" => true
             );
         } else {
@@ -69,7 +72,8 @@ class Handler extends aHandler {
             );
         } else {
             return array(
-                "error" => "Logout fails."
+                "error" => "Logout fails.",
+                "auth" => true
             );
         }
     }

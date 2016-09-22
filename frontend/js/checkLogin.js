@@ -5,21 +5,18 @@ $(document).ready(function(){
 
     /* Check user Session */
     $.ajax({
-        url: "backend/rest.php/auth/logout",
-        //contentType: "application/json",
-        //data: JSON.stringify(data),
+        url: "backend/rest.php/auth/check",
         type: "GET",
-        //dataType: "json",
-        success: function (response) {
-            var data = JSON.parse(response);
-            console.log(data);
-
+        dataType: "json",
+        success: function (data) {
             if (data.hasOwnProperty('auth')) {
-                console.log(data.auth);
 
                 /* If user is authenticated, then show page */
                 if (data.auth) {
-                    $('#generalContainer').append('<p>' + data.result.username + ' ' + data.result.role + '</p>');
+                    $('#generalContainer').append(managementTemplate);
+                    console.log(data.result.username);
+                    $('#uniqueUser').empty();
+                    $('#uniqueUser').text('Welcome, ' +  data.result.username + '!');
                 /* If is not authenticated, the show login form */
                 } else {
                     $('#generalContainer').append(loginForm);

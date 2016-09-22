@@ -3,7 +3,7 @@ var loginForm = '<center> \
         <div class="container"> \
             <div class="form-signin"> \
                 <h4 class="form-signin-heading">Please Log In </h4> \
-                <p id="UserErrLog" class="label label-danger"></p> \
+                <p id="userErrLog" class="label label-danger"></p> \
                 <p></p> \
                 <label for="inputEmail" class="sr-only">Username</label> \
                 <input type="email" id="inputUser" class="form-control" placeholder="User" autofocus required> \

@@ -1,6 +1,7 @@
 <?php
 namespace UserResource;
 
+use AuthResource\UserSession;
 use Core\aHandler;
 use Util\Logging;
 use Util\Util;
@@ -29,6 +30,10 @@ class Handler extends aHandler {
 
         /* Username must be unique */
         $this->_checkUsername($data['username']);
+
+        $userSession = UserSession::getInstance();
+        if ($userSession->isAdmin())  insert
+
 
         $data['password'] = Util::encryptPassword($data['password']);
         return $this->_dao->insert($data);

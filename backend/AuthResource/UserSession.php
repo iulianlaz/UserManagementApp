@@ -90,6 +90,14 @@ class UserSession {
         return false;
     }
 
+    public function isAdmin() {
+        if ($this->isLoggedIn()) {
+            return ($_SESSION['userInfo']['role'] == 'admin');
+        }
+
+        return false;
+    }
+
     /**
      * Logout user
      * @return bool

@@ -3,7 +3,11 @@ $(document).ready(function(){
     /* Clear general container */
     $('#generalContainer').empty();
 
-    /* Check user Session */
+    /**
+     * Checks user Session:
+     *  - if user is authenticated, then management template will be loaded
+     *  - if is not authenticated, login form will be shown
+     */
     $.ajax({
         url: "backend/rest.php/auth/check",
         type: "GET",
@@ -13,10 +17,7 @@ $(document).ready(function(){
 
                 /* If user is authenticated, then show page */
                 if (data.auth) {
-                    $('#generalContainer').append(managementTemplate);
-                    console.log(data.result.username);
-                    $('#uniqueUser').empty();
-                    $('#uniqueUser').text('Welcome, ' +  data.result.username + '!');
+                    generateManagementPage(data.result);
                 /* If is not authenticated, the show login form */
                 } else {
                     $('#generalContainer').append(loginForm);

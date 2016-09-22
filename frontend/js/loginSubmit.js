@@ -19,10 +19,7 @@ $(document).ready(function(){
 
                     /* If user is authenticated, then show page */
                     if (data.auth) {
-                        $('#generalContainer').append(managementTemplate);
-                        console.log(data.result.username);
-                        $('#uniqueUser').empty();
-                        $('#uniqueUser').text('Welcome, ' +  data.result.username + '!');
+                        generateManagementPage(data.result);
 
                     /* If error occurs, then show error */
                     } else {

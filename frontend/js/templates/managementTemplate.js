@@ -22,14 +22,11 @@ var managementTemplate = '<!-- Nav bar --> \
     </nav> \
 \
     <div class="row"> \
-        <div class="col-md-10">.col-md-6\
+        <div id="mainBody" class="col-md-10">\
         </div> \
         \
         <div class="col-md-2"> \
-            <ul class="nav nav-pills nav-stacked"> \
-                <li class="active"><a href="#">User Management</a></li> \
-                <li><a href="#" id="uniqueAccount">Edit My Account</a></li> \
-                <li><a href="#" id="userLogout">Logout</a></li> \
+            <ul id="userOptions" class="nav nav-pills nav-stacked"> \
             </ul> \
         </div> \
     </div>';

@@ -19,9 +19,6 @@ $(document).ready(function(){
         var currUser = welcomeCurrentUser.replace('Welcome, ', '');
 
         var data = {};
-        if (currUser) {
-            data.currentUsername = currUser;
-        }
 
         if (user) {
             data.username = user;
@@ -45,9 +42,11 @@ $(document).ready(function(){
                      $('#userEditAccountErrLog').removeClass('label-danger').addClass('label-success');
                      $('#userEditAccountErrLog').append(data.message);
 
-                     /* Update username from welcome (right top corner) */
-                     $('#uniqueUser').empty();
-                     $('#uniqueUser').text('Welcome, ' + data.result.username + '!');
+                     if (data.hasOwnProperty('result') && data.result.hasOwnProperty('username')) {
+                         /* Update username from welcome (right top corner) */
+                         $('#uniqueUser').empty();
+                         $('#uniqueUser').text('Welcome, ' + data.result.username + '!');
+                     }
                  }
 
                 if (data.hasOwnProperty('error')) {

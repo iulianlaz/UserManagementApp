@@ -51,7 +51,7 @@ class Handler extends aHandler {
      * @param $data
      */
     protected function _edit($data) {
-        if (!isset($data['currentUsername'])) {
+        if (empty($data['currentUsername'])) {
             throw new \Exception('Current username is not set.');
         }
 
@@ -100,13 +100,22 @@ class Handler extends aHandler {
 
                 if (isset($data['username'])) {
                     $response['result']['username'] = $data['username'];
+
+                    /* If currently auth user is updated, then update username from session */
+                    $userSession = UserSession::getInstance();
+                    $userInfo = $userSession->checkSession();
+                    if ($userInfo['username'] == $currUsername) {
+                        $userSession->updateUsername($data['username']);
+                    }
                 }
 
-                /* If currently auth user is updated, then update username from session */
-                $userSession = UserSession::getInstance();
-                $userInfo = $userSession->checkSession();
-                if ($userInfo['username'] == $currUsername) {
-                    $userSession->updateUsername($data['username']);
+                /* If currently auth user role is updated, then update role from session */
+                if (isset($data['role'])) {
+                    $userSession = UserSession::getInstance();
+                    $userInfo = $userSession->checkSession();
+                    if ($userInfo['username'] == $currUsername) {
+                        $userSession->updateRole($data['role']);
+                    }
                 }
 
                 return $response;

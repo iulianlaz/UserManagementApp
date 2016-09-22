@@ -8,7 +8,6 @@ $(document).ready(function() {
             $("input:checkbox[name=user-del-checkbox]:checked").each(function(){
                 delUsers.push($(this).val());
             });
-            console.log(delUsers);
 
             if (delUsers.length > 0) {
                 $.ajax({

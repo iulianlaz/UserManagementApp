@@ -1,9 +1,7 @@
 <?php
 namespace UserResource;
 
-use Auth\UserSession;
 use Core\aHandler;
-use Core\Request;
 use Util\Logging;
 use Util\Util;
 

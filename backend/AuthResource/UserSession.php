@@ -3,6 +3,7 @@ namespace AuthResource;
 
 use Datasource\MongoDAO;
 use Util\Logging;
+use Util\Util;
 
 /**
  * Class UserSession
@@ -49,7 +50,7 @@ class UserSession {
                     }
 
                     Logging::log('-----> Pass data: ', $result);
-                    if (password_verify($password, $result[0]['password'])) {
+                    if (Util::checkPassword($password, $result[0]['password'])) {
                         Logging::log('-----> OK !!!!');
                         $_SESSION['userIdSession'] = $id;
                         return true;

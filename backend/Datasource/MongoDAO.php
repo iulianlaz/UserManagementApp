@@ -47,7 +47,9 @@ class MongoDAO {
      * @return \MongoDB\Driver\Cursor
      */
     public function find($query = null) {
-        return $this->_collection->find($query);
+        return $this->_collection->find(
+            $query
+        );
     }
 
     /**

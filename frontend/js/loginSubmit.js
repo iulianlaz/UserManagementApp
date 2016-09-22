@@ -4,10 +4,10 @@ $(document).ready(function(){
 
         var user = $('#inputUser').val();
         var pass = $('#inputPassword').val();
-        var data = {'role': user, 'password':pass, "name": "iulian", "email": "test@dd.com"};
+        var data = {'role': user, 'password':pass, "username": "iuliantest", "email": "test@dd.com"};
 
         $.ajax({
-            url: "backend/rest.php/user/delete",
+            url: "backend/rest.php/auth/login",
             contentType: "application/json",
             data: JSON.stringify(data),
             type: "POST",

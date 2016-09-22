@@ -1,6 +1,7 @@
 <?php
 namespace UserResource;
 
+use Auth\UserSession;
 use Core\aHandler;
 use Core\Request;
 use Util\Logging;
@@ -11,59 +12,57 @@ use Util\Util;
  * @package Core
  */
 class Handler extends aHandler {
-    const USR_RESOURCE = 'user';
+    /**
+     * Supported operation
+     * @var array
+     */
+    protected $_supportedOps = array(
+        '_add',
+        '_edit',
+        '_delete'
+    );
 
     /**
-     * Method that handles the request
-     * @param Request $request
+     * @param $data
      */
-    public function handle(Request $request) {
-        $resName = $request->getResourceName();
-        $this->_validateResource($resName);
-        $opName = $request->getOperationName();
+    protected function _add($data) {
+        $validator = new UserValidator($data);
+        $validator->validateUser();
 
-        $this->_handleOperation($opName, $request->getPayload());
+        /* Username must be unique */
+        $this->_checkUsername($data['username']);
+
+        $data['password'] = Util::encryptPassword($data['password']);
+        return $this->_dao->insert($data);
+    }
+
+    /**
+     * Username must be unique, we must check if it exists in database
+     * @throws \Exception
+     * @param $username
+     */
+    private function _checkUsername($username) {
+        $result = $this->_dao->find(array("username" => $username));
+        $resultArray = $result->toArray();
+
+        if (!empty($resultArray)) {
+            throw new \Exception(('Username already exists'));
+        }
 
         return true;
+    }
+
+    /**
+     * @param $data
+     */
+    protected function _edit($data) {
 
     }
 
     /**
-     * @param $resourceName
-     * @return bool
-     * @throws \Exception
+     * @param $ids
      */
-    private function _validateResource($resourceName) {
-        if ($resourceName == self::USR_RESOURCE) {
-            return true;
-        }
+    protected function _delete($ids) {
 
-        throw new \Exception('Invalid resource');
-    }
-
-    /**
-     * @param $opName
-     */
-    private function _handleOperation($opName, $data) {
-        $validator = new UserValidator($data);
-        switch ($opName) {
-            case 'add':
-                // FIXME: username must be UNIQUE
-                $validator->validateUser();
-                $data['password'] = Util::encryptPassword($data['password']);
-                $this->_dao->insert($data);
-                break;
-
-            case 'edit':
-                // To do : validate editable attr + encrypt pass
-                break;
-
-            case 'delete':
-                $this->_dao->delete($data);
-                break;
-
-            default:
-                throw new \Exception('Invalid operation name');
-        }
     }
 }

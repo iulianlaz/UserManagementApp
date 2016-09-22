@@ -24,7 +24,7 @@ class UserValidator {
 
     public function validateUser() {
         $this->validateRole();
-        $this->validateName();
+        $this->validateUsername();
         $this->validateEmail();
         $this->validatePassword();
     }
@@ -47,17 +47,17 @@ class UserValidator {
      * Validates name propery
      * @throws \Exception
      */
-    public function validateName() {
-        if (empty($this->_userData['name'])) {
-            throw new \Exception(' Invalid name');
+    public function validateUsername() {
+        if (empty($this->_userData['username'])) {
+            throw new \Exception(' Invalid username');
         }
 
-        if (!is_string($this->_userData['name'])) {
-            throw new \Exception(' Invalid name');
+        if (!is_string($this->_userData['username'])) {
+            throw new \Exception(' Invalid username');
         }
 
-        if (strlen($this->_userData['name']) > 257) {
-            throw new \Exception(' Invalid name');
+        if (strlen($this->_userData['username']) > 257) {
+            throw new \Exception(' Invalid username');
         }
     }
 
@@ -89,8 +89,13 @@ class UserValidator {
             throw new \Exception(' Invalid password');
         }
 
-        /* Password must contain alphanumeric and special chars */
-        if (!preg_match('/^[A-Za-z0-9]*[^A-Za-z0-9]+[A-Za-z0-9]*$/', $this->_userData['password'])) {
+        /* Password must contain alphanumeric */
+        if (!preg_match('/[A-Za-z0-9]+/', $this->_userData['password'])) {
+            throw new \Exception(' Invalid password');
+        }
+
+        /* Password must contain special chars */
+        if (!preg_match('/[^A-Za-z0-9]+/', $this->_userData['password'])) {
             throw new \Exception(' Invalid password');
         }
 

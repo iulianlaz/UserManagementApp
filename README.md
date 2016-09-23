@@ -125,6 +125,7 @@
  + What page we should load
  + If sort or filters are applied, then do not remove them
  
+ 
  Page number is obtained from pagination section (will be discussed). If it does not exist, then set default value to 1.  
  Filter value and sort value are obtained from previously saved values (if any).  
  A query to the `rest.php/user/find/page=\<no\>` will be sent. Now, we should obtain the users according to our query.  

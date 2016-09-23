@@ -90,7 +90,7 @@
    queries and relevant documents are fetched from database. Also, if page is provided, this method will handle pagination.
  + Delete user: If the user has permissions to delete an array with ids, then the documents with these ids are deleted. 
 
-#### Authentication Handler
+##### Authentication Handler
  Authentication handler has the following supported operation:
  + Check operation: Checks if an user is authenticated or not
  + Login operation: Logs a user into the system if the input data is correct. Also, it sets the session details for logged

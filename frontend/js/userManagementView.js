@@ -12,6 +12,7 @@ var buildUserList = function(){
     $('#mainBody').append(userManagementButtons);
     $('#mainBody').append("<p></p>");
 
+    /* Get page number from current <a id=pageNumberValue> tag if exists */
     var pageNo = '';
     if ($(this).attr('id') === 'pageNumberValue') {
         pageNo = $(this).text();
@@ -23,8 +24,6 @@ var buildUserList = function(){
     } else {
         data.page = pageNo;
     }
-
-    console.log(data.page);
 
     $.ajax({
         url: "backend/rest.php/user/find?page=" + data.page,

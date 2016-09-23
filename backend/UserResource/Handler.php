@@ -205,6 +205,7 @@ class Handler extends aHandler {
                         }
 
                         $response['totalPages'] = $finalPages;
+
                     } else {
                         $response['totalPages'] = 0;
                     }

@@ -1,5 +1,6 @@
 <?php
 namespace Core;
+use Util\Logging;
 
 /**
  * Class Interceptor
@@ -65,7 +66,13 @@ class Interceptor {
         $input = file_get_contents('php://input');
         if (!empty($input)) {
             $payload = json_decode($input, true);
+
             if (!empty($payload)) {
+               /* Apply htmlentities function for each value */
+                array_walk_recursive($payload, function (&$value) {
+                   $value = htmlentities($value, ENT_QUOTES, "UTF-8");;
+                });
+
                 $this->_request->setPayload($payload);
             }
         }

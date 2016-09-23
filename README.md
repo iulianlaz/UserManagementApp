@@ -22,15 +22,22 @@
 #### Step 2: Install PHP
  
  Run this command:
- `sudo apt-get install php5 libapache2-mod-php5 php5-mcrypt`
- `sudo apt-get install php-pear`
- `sudo apt-get install php5-dev`
+ ```
+ sudo apt-get install php5 libapache2-mod-php5 php5-mcrypt
+ sudo apt-get install php-pear
+ sudo apt-get install php5-dev
+ sudo apt-get install libpcre3 libpcre3-dev
+ ```
 
 #### Step 3: Install MongoDB
 
  Follow the instructions from: https://docs.mongodb.com/v3.0/tutorial/install-mongodb-on-ubuntu/
+ 
  After that, install mongodb extension:
+ 
  `pecl install mongodb`
+ 
+ Put `extension=mongodb.so` in php.ini file (more info here: https://github.com/mongodb/mongo-php-library).
 
 ### API
 

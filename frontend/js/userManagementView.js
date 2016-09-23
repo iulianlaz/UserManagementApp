@@ -5,18 +5,38 @@
  *  - delete user
  */
 var buildUserList = function(){
+    /* If a filter is provided, the save it */
+    var filterValue = {};
+    if (($(this).attr('id') === 'refreshGrid') || ($(this).attr('id') === 'filterSubmitId')) {
+        filterValue.filterValue = $('#filterInputId').val();
+    }
+
+    console.log('____________before');
+    console.log(filterValue);
 
     /* Main body must be cleared */
     $('#mainBody').empty();
 
     $('#mainBody').append(userManagementButtons);
     $('#mainBody').append("<p></p>");
+    $('#mainBody').append(filterButton);
+
+    console.log('____________after');
+    console.log(filterValue);
+
+    if (($(this).attr('id') === 'refreshGrid') || ($(this).attr('id') === 'filterSubmitId')) {
+        if (filterValue.hasOwnProperty('filterValue')) {
+            $('#filterInputId').val(filterValue.filterValue);
+        }
+    }
+
 
     /* Get page number from current <a id=pageNumberValue> tag if exists */
     var pageNo = '';
     if ($(this).attr('id') === 'pageNumberValue') {
         pageNo = $(this).text();
     }
+
 
     var data = {};
     if (pageNo == '') {
@@ -28,7 +48,7 @@ var buildUserList = function(){
     $.ajax({
         url: "backend/rest.php/user/find?page=" + data.page,
         contentType: "application/json",
-        //data: JSON.stringify(data),
+        data: JSON.stringify(filterValue),
         type: "POST",
         dataType: "json",
         success: function (data) {

@@ -13,6 +13,18 @@ var userManagementButtons = '<div class="row"> \
             </div> \
             </div>';
 
+var filterButton = '<br><div class="row"> \
+        <div class="col-md-2"> \
+            <div class="input-group">\
+                <span class="input-group-btn">\
+                    <input type="email" id="filterInputId" class="form-control" placeholder="Add filter"> \
+                    <button id="filterSubmitId" class="btn btn-primary" type="submit">Filter</button>\
+                </span>\
+                <input type="hidden" id="filterInputHiddenId" class="form-control""> \
+            </div>\
+        </div> \
+    </div><p></p>';
+
 /**
  * Header for user management grid
  * @type {string}

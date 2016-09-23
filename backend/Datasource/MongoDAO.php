@@ -5,6 +5,16 @@ use Util\Logging;
 
 require_once("vendor/autoload.php");
 
+/**
+ * Database structure:
+ *  - username
+ *  - role
+ *  - email
+ *  - password
+ *
+ * Class MongoDAO
+ * @package Datasource
+ */
 class MongoDAO {
     /**
      * @var \MongoDB\Client|null
@@ -28,6 +38,13 @@ class MongoDAO {
 
         $this->_database = $this->_mongoDAO->$db;
         $this->_collection = $this->_database->$coll;
+
+        /* Create text index in order to search strings when filter is called */
+        $result = $this->_collection->createIndex(array(
+            "username" => "text",
+            "role" => "text",
+            "email" => "text"
+        ));
     }
 
     /**
@@ -59,7 +76,8 @@ class MongoDAO {
      * @return array
      */
     public function find($query = array(), $options = array()) {
-        Logging::log('_____________________DBBBBB', $options);
+        Logging::log('______ Query', $query);
+        Logging::log('______ Options', $options);
         return $this->_collection->find(
             $query,
             $options

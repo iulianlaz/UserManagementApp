@@ -3,24 +3,20 @@ namespace UserResource;
 use Util\Logging;
 
 /**
- * Class UserValidator
+ * Class aQueryValidator
  * @package UserResource
  */
-class QueryValidator {
+class aQueryValidator {
     /**
      * @var array
      */
-    private $_queryData = array();
-
-    private $_allowedAttributes = array('page');
+    protected $_queryData = array();
 
     /**
-     * UserValidator constructor.
-     * @param $data
+     * Allowed attributes
+     * @var array
      */
-    public function __construct($data) {
-        $this->_queryData = $data;
-    }
+    protected $_allowedAttributes = array();
 
     /**
      * Only some attributes must be allowed
@@ -33,11 +29,6 @@ class QueryValidator {
         if (array_diff($inputKeys, $this->_allowedAttributes)) {
             throw new \Exception(' Invalid query params');
         }
-
-        if (empty($this->_queryData['page'])) {
-            throw new \Exception(' Invalid page param');
-        }
-
         return true;
     }
 }

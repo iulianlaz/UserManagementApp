@@ -44,9 +44,23 @@
 
 ### API
 
+ The following methods are implemented in backend:
+ + user/add
+ + user/edit
+ + user/find
+ + user/delete
+ + auth/login
+ + auth/logout
+ + auth/check
+
+
 ### Implementation
 
+ The project is structured in two main components: backend and frontend.
+
 #### Backend
+
+ 
 
 #### Frontend
 

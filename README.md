@@ -5,7 +5,7 @@
 
 ### Installation
 
-## API
+### API
 
 ### Implementation
 

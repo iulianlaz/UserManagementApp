@@ -20,6 +20,10 @@ $(document).ready(function(){
 
         var data = {};
 
+        if (currUser) {
+            data.currentUsername = currUser;
+        }
+
         if (user) {
             data.username = user;
         }

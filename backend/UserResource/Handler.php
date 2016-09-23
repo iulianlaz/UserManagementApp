@@ -76,7 +76,7 @@ class Handler extends aHandler {
             throw new \Exception('Current username is not set.');
         }
 
-        $this->_validateUserData($data);
+        $data = $this->_validateUserData($data);
 
         /* Only admin users can add new users */
         if ($this->_checkPermissions($data['currentUsername'])) {
@@ -297,6 +297,8 @@ class Handler extends aHandler {
         if (isset($data['email'])) {
             $validator->validateEmail();
         }
+
+        return $data;
     }
 
     private function _buildSortQuery($query) {

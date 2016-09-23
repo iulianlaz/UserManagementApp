@@ -24,6 +24,15 @@ class Handler extends aHandler {
     );
 
     /**
+     * Mapper for operators
+     * @var array
+     */
+    private $_opMapper = array(
+        "asc" => 1,
+        "desc" => -1
+    );
+
+    /**
      * Supported operation
      * @var array
      */
@@ -150,15 +159,17 @@ class Handler extends aHandler {
             $optionPage = $options['page'];
         }
 
-        /* Validates input query */
-        $queryValidator = new InputQueryValidator();
-        $queryValidator->validateQuery();
-        $query = $this->_mapQuery($query);
-
         /* Validates request query */
         $optionsValidator = new RequestQueryValidator($options);
         $optionsValidator->validateQuery();
         $options = $this->_mapOptions($options);
+
+        /* Validates input query */
+        $queryValidator = new InputQueryValidator($query);
+        $queryValidator->validateQuery();
+
+        $options['sort'] = $this->_buildSortQuery($query);
+        $query = $this->_mapQuery($query);
 
         if ($this->_checkPermissions()) {
             $result = $this->_dao->find($query, $options);
@@ -288,12 +299,24 @@ class Handler extends aHandler {
         }
     }
 
+    private function _buildSortQuery($query) {
+        $sort = array();
+        if (isset($query['sortBy']) && isset($query['sortOrder'])) {
+            $sort = array(
+                $query['sortBy'] => $this->_opMapper[$query['sortOrder']]
+            );
+        }
+
+        return $sort;
+    }
+
     /**
      * Add query in order to search in username, role and email fields
      * @param $query
      * @return mixed
      */
     private function _mapQuery($query) {
+        $newQuery = array();
         if (!empty($query) && (isset($query['filterValue']))) {
             $newQuery = array(
                '$or' => array(
@@ -318,7 +341,7 @@ class Handler extends aHandler {
             return $newQuery;
         }
 
-        return $query;
+        return $newQuery;
     }
 
     /**

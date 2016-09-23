@@ -5,14 +5,32 @@
  *  - delete user
  */
 var buildUserList = function(){
-    /* If a filter is provided, the save it */
-    var filterValue = {};
-    if (($(this).attr('id') === 'refreshGrid') || ($(this).attr('id') === 'filterSubmitId')) {
-        filterValue.filterValue = $('#filterInputId').val();
-    }
+    var requestQuery = {};
 
-    console.log('____________before');
-    console.log(filterValue);
+    /* Get sort and filter values */
+    if (($(this).attr('id') === 'refreshGrid') ||
+        ($(this).attr('id') === 'filterSubmitId') ||
+        ($(this).attr('id') === 'pageNumberValue') ||
+        ($(this).attr('id') === 'sortRoleAsc') ||
+        ($(this).attr('id') === 'sortRoleDesc') ||
+        ($(this).attr('id') === 'sortUsernameAsc') ||
+        ($(this).attr('id') === 'sortUsernameDesc') ||
+        ($(this).attr('id') === 'sortEmailAsc') ||
+        ($(this).attr('id') === 'sortEmailDesc')
+    ) {
+        requestQuery.filterValue = $('#filterInputId').val();
+
+        var sortByTemp= $("#sortByHidden").val();
+        if (sortByTemp) {
+            requestQuery.sortBy = sortByTemp;
+        }
+
+        var sortOrderTemp = $("#sortOrderHidden").val();
+        if (sortOrderTemp) {
+            requestQuery.sortOrder = sortOrderTemp;
+        }
+
+    }
 
     /* Main body must be cleared */
     $('#mainBody').empty();
@@ -21,12 +39,27 @@ var buildUserList = function(){
     $('#mainBody').append("<p></p>");
     $('#mainBody').append(filterButton);
 
-    console.log('____________after');
-    console.log(filterValue);
+    /* Set filter and sort values for refresh and pagination*/
+    if (($(this).attr('id') === 'refreshGrid') ||
+        ($(this).attr('id') === 'filterSubmitId') ||
+        ($(this).attr('id') === 'pageNumberValue') ||
+        ($(this).attr('id') === 'sortRoleAsc') ||
+        ($(this).attr('id') === 'sortRoleDesc') ||
+        ($(this).attr('id') === 'sortUsernameAsc') ||
+        ($(this).attr('id') === 'sortUsernameDesc') ||
+        ($(this).attr('id') === 'sortEmailAsc') ||
+        ($(this).attr('id') === 'sortEmailDesc')
+    ) {
+        if (requestQuery.hasOwnProperty('filterValue')) {
+            $('#filterInputId').val(requestQuery.filterValue);
+        }
 
-    if (($(this).attr('id') === 'refreshGrid') || ($(this).attr('id') === 'filterSubmitId')) {
-        if (filterValue.hasOwnProperty('filterValue')) {
-            $('#filterInputId').val(filterValue.filterValue);
+        if (requestQuery.hasOwnProperty('sortBy')) {
+            $('#sortByHidden').val(requestQuery.sortBy);
+        }
+
+        if (requestQuery.hasOwnProperty('sortOrder')) {
+            $('#sortOrderHidden').val(requestQuery.sortOrder);
         }
     }
 
@@ -36,7 +69,6 @@ var buildUserList = function(){
     if ($(this).attr('id') === 'pageNumberValue') {
         pageNo = $(this).text();
     }
-
 
     var data = {};
     if (pageNo == '') {
@@ -48,7 +80,7 @@ var buildUserList = function(){
     $.ajax({
         url: "backend/rest.php/user/find?page=" + data.page,
         contentType: "application/json",
-        data: JSON.stringify(filterValue),
+        data: JSON.stringify(requestQuery),
         type: "POST",
         dataType: "json",
         success: function (data) {
@@ -71,6 +103,7 @@ var buildUserList = function(){
 
             if (data.hasOwnProperty('result')) {
 
+                /* Build row for each user */
                 for (var userItem in data.result) {
                     if (data.result.hasOwnProperty(userItem)) {
                         var userList = '<div class="row show-grid grid-custom-user">';
@@ -129,7 +162,7 @@ var buildUserList = function(){
                 );
 
                 for(var no = 1; no <= data.totalPages; no++) {
-                    newPageLink += '<li><a href="#" id="pageNumberValue"> ' + no + '</a></li>';
+                    newPageLink += '<li><a href="#" id="pageNumberValue">' + no + '</a></li>';
                 }
                 newPageLink += '</ul></nav>';
 

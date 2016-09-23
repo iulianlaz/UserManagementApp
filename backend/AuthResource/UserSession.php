@@ -37,7 +37,7 @@ class UserSession {
             $cursor = $this->_dao->find(array(
                 "username" => $username
             ));
-            Logging::log('----------------', $cursor);
+
             if (!empty($cursor)) {
                 if (!is_array($cursor)) {
                     $result = $cursor->toArray();

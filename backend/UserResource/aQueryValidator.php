@@ -27,7 +27,7 @@ class aQueryValidator {
         $inputKeys = array_keys($this->_queryData);
 
         if (array_diff($inputKeys, $this->_allowedAttributes)) {
-            throw new \Exception(' Invalid query params');
+            throw new \Exception('Invalid query params');
         }
         return true;
     }

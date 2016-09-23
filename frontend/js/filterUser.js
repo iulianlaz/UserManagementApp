@@ -1,5 +1,5 @@
 /**
- * Handles the way a user is edited
+ * Handles the way user grid is filtered
  */
 $(document).ready(function(){
     /* ============ Add user template =========== */

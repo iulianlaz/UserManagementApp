@@ -72,12 +72,11 @@ class MongoDAO {
     }
 
     /**
-     * @param null $query
-     * @return array
+     * @param array $query
+     * @param array $options
+     * @return \MongoDB\Driver\Cursor
      */
     public function find($query = array(), $options = array()) {
-        Logging::log('______ Query', $query);
-        Logging::log('______ Options', $options);
         return $this->_collection->find(
             $query,
             $options

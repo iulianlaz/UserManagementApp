@@ -17,6 +17,10 @@ body {
     margin-left: 1%;
 }
 
+.grid-custom-user-buttons {
+    margin-left: 5px;
+}
+
 .grid-custom-user-pag {
     margin-left: 40%;
 }

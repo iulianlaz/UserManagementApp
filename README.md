@@ -60,7 +60,14 @@
 
 #### Backend
 
- 
+##### Rest endpoint
+ The endpoint for all requests is located at backend/rest.php. When a request arrives, it is processed as follows:
+ + An interceptor for the request is created. Here, the request is validated (only application/json content-type is
+   accepted). After that, a Request object is created with available information. The Request object contains attributes
+   such as: resource name, resource operation, query parameters and payload. For example, if a request /rest.php/user/find?page=1
+   arrives, the resourceName=user, resourceOperation=find and queryParameters=\["page": 1\].
+ + Based on resource name from Request object a particular handler will be initialized (e.g. user handler, auth handler)
+ + Before a request is handled, it is checked if user is authenticated.
 
 #### Frontend
 

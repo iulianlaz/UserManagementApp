@@ -32,7 +32,6 @@
 #### Step 3: Install MongoDB
 
  Follow the instructions from: https://docs.mongodb.com/v3.0/tutorial/install-mongodb-on-ubuntu/
- 
  After that, install mongodb extension:
  
  `pecl install mongodb`

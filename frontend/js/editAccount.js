@@ -37,6 +37,17 @@ $(document).ready(function(){
             success: function (data) {
                 $('#inputEditAccountUsername').val("");
                 $('#inputEditAccountPassword').val("");
+
+                /* Check authentication */
+                if (data.hasOwnProperty('auth')) {
+                    /* If user is not authenticated, then show login form */
+                    if (!data.auth) {
+                        $('#generalContainer').empty();
+                        $('#generalContainer').append(loginForm);
+                        return;
+                    }
+                }
+
                  if (data.hasOwnProperty('message')) {
                      $('#userEditAccountErrLog').empty();
                      $('#userEditAccountErrLog').removeClass('label-danger').addClass('label-success');

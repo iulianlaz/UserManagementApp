@@ -30,7 +30,7 @@ abstract class aHandler {
     public function handle(Request $request) {
         $opName = $request->getOperationName();
 
-        return $this->_handleOperation($opName, $request->getPayload());
+        return $this->_handleOperation($opName, $request->getPayload(), $request->getQueryParams());
     }
 
     /**
@@ -40,7 +40,7 @@ abstract class aHandler {
      * @throws \Exception
      * @param $opName
      */
-    private function _handleOperation($opName, $data) {
+    private function _handleOperation($opName, $data, $queryParams) {
         $methodName = '_' . strtolower($opName);
 
         if (!in_array($methodName, $this->_supportedOps)) {
@@ -48,7 +48,7 @@ abstract class aHandler {
         }
 
         try {
-            return $this->$methodName($data);
+            return $this->$methodName($data, $queryParams);
         } catch (\Exception $e) {
             throw new \Exception($e->getMessage());
         }

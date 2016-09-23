@@ -12,6 +12,18 @@ use Util\Util;
  */
 class Handler extends aHandler {
     /**
+     * The page size
+     */
+    const PAGE_SIZE = 2;
+
+    /**
+     * @var array
+     */
+    private $_optionMapper = array(
+        "page" => "skip"
+    );
+
+    /**
      * Supported operation
      * @var array
      */
@@ -130,13 +142,23 @@ class Handler extends aHandler {
      * @param array $query
      * @return array
      */
-    protected function _find($query = array()) {
-        if (empty($query)) {
+    protected function _find($query = array(), $options = array()) {
+        if (is_null($query)) {
             $query = array();
         }
 
+        $optionPage = null;
+        if (isset($options['page'])) {
+            $optionPage = $options['page'];
+        }
+
+        $optionsValidator = new QueryValidator($options);
+        $optionsValidator->validateQuery();
+        $options = $this->_mapOptions($options);
+
         if ($this->_checkPermissions()) {
-            $result = $this->_dao->find($query);
+            $result = $this->_dao->find($query, $options);
+
             if (!empty($result)) {
                 $resultArray = $result->toArray();
 
@@ -161,8 +183,34 @@ class Handler extends aHandler {
                     }
                 }
 
+                $response = array();
+                $response['result'] = $responseArray;
 
-                return array("result" => $responseArray);
+                if (!is_null($optionPage)) {
+                    /* Sets the total number of pages */
+                    $total = $this->_dao->count();
+                    if (!is_null($total)) {
+                        $pages = (int)($total / self::PAGE_SIZE);
+
+                        $finalPages = null;
+                        if ($pages == 0) {
+                            $finalPages = 0;
+                        } else {
+                            $pagesReal = $total % self::PAGE_SIZE;
+                            if ($pagesReal == 0) {
+                                $finalPages = $pages;
+                            } else {
+                                $finalPages = $pages + 1;
+                            }
+                        }
+
+                        $response['totalPages'] = $finalPages;
+                    } else {
+                        $response['totalPages'] = 0;
+                    }
+                }
+
+                return $response;
             }
         }
 
@@ -183,6 +231,35 @@ class Handler extends aHandler {
         }
 
         return array("error" => "Delete method failed");
+    }
+
+    /**
+     * Map query according to query mapper
+     * @param $query
+     * @return array
+     */
+    private function _mapOptions($options) {
+        if (!empty($options)) {
+
+            $newQuery = array();
+            foreach ($this->_optionMapper as $key => $value) {
+                if (isset($options[$key])) {
+
+                    if ($key == 'page') {
+                        if (!empty($options[$key])) {
+                            $newQuery[$value] = self::PAGE_SIZE * ($options[$key] - 1);
+                        }
+                        $newQuery['limit'] = self::PAGE_SIZE;
+                    } else {
+                        $newQuery[$value] = $options[$key];
+                    }
+                }
+            }
+
+            return $newQuery;
+        }
+
+        return $options;
     }
 
     /**

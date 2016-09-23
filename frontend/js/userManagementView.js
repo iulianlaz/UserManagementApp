@@ -12,13 +12,36 @@ var buildUserList = function(){
     $('#mainBody').append(userManagementButtons);
     $('#mainBody').append("<p></p>");
 
+    var pageNo = '';
+    if ($(this).attr('id') === 'pageNumberValue') {
+        pageNo = $(this).text();
+    }
+
+    var data = {};
+    if (pageNo == '') {
+        data.page = 1;
+    } else {
+        data.page = pageNo;
+    }
+
+    console.log(data.page);
+
     $.ajax({
-        url: "backend/rest.php/user/find",
+        url: "backend/rest.php/user/find?page=" + data.page,
         contentType: "application/json",
         //data: JSON.stringify(data),
         type: "POST",
         dataType: "json",
         success: function (data) {
+            /* Check authentication */
+            if (data.hasOwnProperty('auth')) {
+                /* If user is not authenticated, then show login form */
+                if (!data.auth) {
+                    $('#generalContainer').empty();
+                    $('#generalContainer').append(loginForm);
+                    return;
+                }
+            }
 
             $('#mainBody').append(header);
 
@@ -28,8 +51,6 @@ var buildUserList = function(){
             var currUser = welcomeCurrentUser.replace('Welcome, ', '');
 
             if (data.hasOwnProperty('result')) {
-                console.log('----here-----');
-                console.log(data.result1);
 
                 for (var userItem in data.result) {
                     if (data.result.hasOwnProperty(userItem)) {
@@ -79,8 +100,21 @@ var buildUserList = function(){
                     }
 
                 }
+            }
 
+            /* Add pagination */
+            if (data.hasOwnProperty('totalPages')) {
+                var newPageLink = ('<p></p>' +
+                    '<nav aria-label="Page navigation" class="grid-custom-user-pag">' +
+                    '<ul class="pagination">'
+                );
 
+                for(var no = 1; no <= data.totalPages; no++) {
+                    newPageLink += '<li><a href="#" id="pageNumberValue"> ' + no + '</a></li>';
+                }
+                newPageLink += '</ul></nav>';
+
+                $('#mainBody').append(newPageLink);
             }
         }
     });
@@ -136,6 +170,16 @@ $(document).ready(function(){
             type: "POST",
             dataType: "json",
             success: function (data) {
+                /* Check authentication */
+                if (data.hasOwnProperty('auth')) {
+                    /* If user is not authenticated, then show login form */
+                    if (!data.auth) {
+                        $('#generalContainer').empty();
+                        $('#generalContainer').append(loginForm);
+                        return;
+                    }
+                }
+
                 $('#inputAddUserUsername').val("");
                 $('#inputAddUserPassword').val("");
                 $('#inputAddUserEmail').val("");
@@ -158,5 +202,8 @@ $(document).ready(function(){
 
     /* ================= Refresh Grid  ================ */
     $('#generalContainer').on('click', '#refreshGrid',  buildUserList);
+
+    /* ================= Each page view  ================ */
+    $('#generalContainer').on('click', '#pageNumberValue',  buildUserList);
 
 });

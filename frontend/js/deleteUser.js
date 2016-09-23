@@ -17,6 +17,16 @@ $(document).ready(function() {
                     type: "POST",
                     dataType: "json",
                     success: function (data) {
+                        /* Check authentication */
+                        if (data.hasOwnProperty('auth')) {
+                            /* If user is not authenticated, then show login form */
+                            if (!data.auth) {
+                                $('#generalContainer').empty();
+                                $('#generalContainer').append(loginForm);
+                                return;
+                            }
+                        }
+
                         $('#inputEditAccountUsername').val("");
                         $('#inputEditAccountPassword').val("");
                         if (data.hasOwnProperty('message')) {

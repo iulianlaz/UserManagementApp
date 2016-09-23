@@ -24,8 +24,7 @@ $(document).ready(function(){
 
         /* username that will be edited */
         var usernameChanged = $('#usernameChanged').attr('value');
-        console.log('___USR CHD___');
-        console.log(usernameChanged);
+
         /* Get current user (this will be updated - because it is unique - it is like an id)*/
         var welcomeCurrentUser = $('#uniqueUser').text();
         welcomeCurrentUser = welcomeCurrentUser.substring(0, welcomeCurrentUser.length - 1);
@@ -57,6 +56,16 @@ $(document).ready(function(){
             type: "POST",
             dataType: "json",
             success: function (data) {
+                /* Check authentication */
+                if (data.hasOwnProperty('auth')) {
+                    /* If user is not authenticated, then show login form */
+                    if (!data.auth) {
+                        $('#generalContainer').empty();
+                        $('#generalContainer').append(loginForm);
+                        return;
+                    }
+                }
+
                 $('#inputEditUserUsername').val("");
                 $('#inputEditUserPassword').val("");
                 $('#inputEditUserRole').val("");

@@ -58,9 +58,11 @@ class MongoDAO {
      * @param null $query
      * @return array
      */
-    public function find($query = array()) {
+    public function find($query = array(), $options = array()) {
+        Logging::log('_____________________DBBBBB', $options);
         return $this->_collection->find(
-            $query
+            $query,
+            $options
         );
     }
 
@@ -76,6 +78,15 @@ class MongoDAO {
         }
 
         return false;
+    }
+
+    /**
+     * Counts the number of documents
+     * @param array $query
+     * @return int
+     */
+    public function count($query = array()) {
+        return $this->_collection->count($query);
     }
 
 

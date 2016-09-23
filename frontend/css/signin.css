@@ -14,4 +14,9 @@ body {
 
 .grid-custom-user {
     background-color: #ffffdd;
+    margin-left: 1%;
+}
+
+.grid-custom-user-pag {
+    margin-left: 40%;
 }

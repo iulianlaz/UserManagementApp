@@ -123,7 +123,7 @@
 ##### Build Grid Section (User Management View) 
  Firstly, we should obtain few information here:
  + What page we should load
- + If sort or filters are applied, then do not remove them
+ + If sort or filters are applied, then do not remove them  
  
  
  Page number is obtained from pagination section (will be discussed). If it does not exist, then set default value to 1.  

@@ -31,13 +31,16 @@
 
 #### Step 3: Install MongoDB
 
- Follow the instructions from: https://docs.mongodb.com/v3.0/tutorial/install-mongodb-on-ubuntu/
- 
- After that, install mongodb extension:
- 
- `pecl install mongodb`
- 
+ Follow the instructions from: https://docs.mongodb.com/v3.0/tutorial/install-mongodb-on-ubuntu/  
+ After that, install mongodb extension:  
+ `pecl install mongodb`  
  Put `extension=mongodb.so` in php.ini file (more info here: https://github.com/mongodb/mongo-php-library).
+
+#### Step 4: Init repo
+
+ Clone this repo in `/var/www/html`.  
+ Run `populateDb.sh` in order to create admin user in database.    
+ Now, you should be able to login from: localhost/UserManagementApp/
 
 ### API
 

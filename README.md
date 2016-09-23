@@ -1,5 +1,4 @@
 ## Simple User Management Web Application
----
 
 ### Overview
 
@@ -54,7 +53,6 @@
  The project is structured in two main components: backend and frontend.
 
 #### Backend
-
  It is structured  in the following layers:
  + endpoint layer
  + authentication layer
@@ -64,9 +62,10 @@
 ##### Rest endpoint
  The endpoint for all requests is located at `backend/rest.php`. When a request arrives, it is processed as follows:
  + An interceptor for the request is created. Here, the request is validated (only application/json content-type is
-   accepted). After that, a Request object is created with available information. The Request object contains attributes
-   such as: resource name, resource operation, query parameters and payload. For example, if a request `/rest.php/user/find?page=1`
-   arrives, the resourceName=user, resourceOperation=find and queryParameters=\["page": 1\].
+   accepted). After that, a Request object is created with available information (htmlentites method is called for 
+   input data). The Request object contains attributes such as: resource name, resource operation, query parameters and 
+   payload. For example, if a request `/rest.php/user/find?page=1` arrives, the resourceName=user, resourceOperation=find 
+   and queryParameters=\["page": 1\].
  + Based on resource name from Request object a particular handler will be initialized (e.g. user handler, auth handler)
  + Before a request is handled, it is checked if user is authenticated. If it is, we move on, otherwise, an error is returned.
  
@@ -96,13 +95,50 @@
  + Logout operation: Logs out a user from the system. The session is destroyed.  
 
 #### Frontend
-
+ It is structured as follows:
+ + `templates/` directory contains elements for each view (relevant names for each view exist in this folder - 
+    managementTemplate.js contains the elements for entire user management area).
+ + Each javascript file handles one single event except userManagementView.js (userManagementView.js handles all events
+   that occur in user management view area (add user, refresh grid, build grid, except users deletion)).
+ + generateManagementPage.js is used to load initial page (used in buildInitialPage.js and loginSubmit.js)
+ + If it is received from backend a `auth=false` response, then login form will be shown 
+ 
 ##### Login Section
+ When index.html is loaded, buildInitialPage.js will populate the page with relevant elements. If user is authenticated,
+ then user management page will be generated. Otherwise, login form will be shown.
+ 
 ##### Edit Account Section
+ Username or password values are sent to the server, but also the current username of authenticated user (based on this
+ username the document from database will be updated).
+ 
 ##### Add User Section
+ Data are sent to the server through `rest.php/user/add` endpoint. 
+
 ##### Edit User Section
-##### Add User Section
+ When users are created into the grid, elements will store their `username` (in order to find the user we want to edit
+ based on his username). Thus, when a user is edited, we already have his username. Also, authenticated user `username`
+ is obtained, because if current user is edited, we must reload the element (`Welocome, <user_name>`) with the new 
+ username.
+ 
+##### Build Grid Section (User Management View) 
+ Firstly, we should obtain few information here:
+ + What page we should load
+ + If sort or filters are applied, then do not remove them
+ 
+ Page number is obtained from pagination section (will be discussed). If it does not exist, then set default value to 1.
+ Filter value and sort value are obtained from previously saved values (if any).
+ A query to the `rest.php/user/find/page=\<no\>` will be sent. Now, we should obtain the users according to our query.
+ Grid will be created.
+ Current user will be marked with `(you)` near his username.
+ Based on response from server, pagination is built also. An element with page number value will be saved.
+ 
 ##### Filter User Section
+ When a filter is applied, it will look in `username`, `role` and `email` values to find relevant information.
+
 ##### Sort User Section
+ Sort each column based on criteria: asc or desc. Grid will be reloaded
+
 ##### Delete User Section
+ It Deletes selected users. An array with `username` values are sent to the server. Grid will be reloaded if users were
+ deleted.
 

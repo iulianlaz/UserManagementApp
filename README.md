@@ -6,6 +6,8 @@
 ![Interface](/images/interface.png)
 
 #### Video tutorial
+ Link: https://www.youtube.com/watch?v=6UgxLHWkraM  
+ 
  Link: https://drive.google.com/open?id=0BzywImwXO-pweUdUVTJMOHFvUzQ
 
 ### Installation
